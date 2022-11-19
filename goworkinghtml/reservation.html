@@ -10,20 +10,11 @@
       integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
       crossorigin="anonymous"
     />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.2.0/dist/css/datepicker-bs5.min.css">
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/notie/dist/notie.min.css">
+    <link rel="stylesheet" type="text/css" href="static/css/styles.css">
     <title>Document</title>
-    <style>
-      .my-footer {
-        height: 5em;
-        background-color: #163b65;
-        margin-top: 1.5em;
-        padding: 1em;
-        color: #ffffff;
-        font-size: 10px;
-      }
-      .room-image {
-        max-width: 50%;
-      }
-    </style>
+
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -85,45 +76,34 @@
         <div class="col-md-3"></div>
         <div class="col-md-6">
           <h1 class="mt-5">寻找可用的房间</h1>
-          <form action="reservation.html" method="get">
+          <form action="reservation.html" method="get" novalidate class="needs-validation">
+
+
             <div class="form-row">
               <div class="col">
-                <div class="mb-3">
-                  <label for="start_data" class="form-label">开始时间</label>
-                  <input
-                    required
-                    type="date"
-                    class="form-control"
-                    id="start_data"
-                    name="start_data"
-                    aria-describedby="startDataHelp"
-                  />
-                  <div id="startDataHelp" class="form-text">
-                    以YYYY-MM-DD的形式输入你的入住时间
+                <div id="reservation-dates" class="form-row">
+                  <div class="col">
+                    <input required class="form-control"  type="text" name="start" placeholder="入住时间">
                   </div>
-                </div>
-              </div>
-              <div class="col">
-                <div class="mb-3">
-                  <label for="end_data" class="form-label">结束时间</label>
-                  <input
-                    required
-                    type="date"
-                    class="form-control"
-                    id="end_data"
-                    name="end_data"
-                    aria-describedby="endDataHelp"
-                  />
-                  <div id="endDataHelp" class="form-text">
-                    以YYYY-MM-DD的形式输入你的离开时间
+                  <div class="col">
+                    <input required class="form-control"  type="text" name="end" placeholder="离开时间">
                   </div>
                 </div>
               </div>
             </div>
+            <hr>
             <button type="submit" class="btn btn-primary">
               查找房间是否可预定
             </button>
           </form>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <p id = "myParagraph">tqqqqqqqqqqqqqqq</p>
+          <p>
+            <button id="colorButton" class="btn btn-outline-secondary">click me</button>
+          </p>
         </div>
       </div>
     </div>
@@ -143,5 +123,183 @@
       integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk"
       crossorigin="anonymous"
     ></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.2.0/dist/js/datepicker-full.min.js"></script>
+    <script src="https://unpkg.com/notie"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+      let attention = Prompt();
+
+
+      (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+          // Fetch all the forms we want to apply custom Bootstrap validation styles to
+          var forms = document.getElementsByClassName('needs-validation');
+          // Loop over them and prevent submission
+          var validation = Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', function(event) {
+              if (form.checkValidity() === false) {
+                event.preventDefault();
+                event.stopPropagation();
+              }
+              form.classList.add('was-validated');
+            }, false);
+          });
+        }, false);
+      })();
+
+
+
+      document.getElementById("colorButton").addEventListener("click",function (){
+        let html = `
+        <form id="check-availability-form" action="" method="post" novalidate class="needs-validation">
+            <div class = "form-row">
+                <div class = "col">
+                    <div class="form-row" id="reservation-dates-modal">
+                        <div class="rol">
+                            <input disabled required class="form-control" type="text" name="start" id="start" placeholder="到达时间"
+                        </div>
+                        <div class="rol">
+                            <input disabled required class="form-control" type="text" name="end" id="end" placeholder="离开时间"
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        `
+        attention.custom({msg: html,title: "选择您的时间"})
+
+      })
+      const elem = document.getElementById("reservation-dates");
+      const rangepicker = new DateRangePicker(elem, {
+        format:"yyyy-mm-dd",
+      });
+
+      function notify(msg,msgType){
+        notie.alert({
+          type: msgType,
+          text: msg,
+        })
+      }
+
+      function notifyModal(title,text,icon,confirmButtonText){
+        Swal.fire({
+          title: title,
+          html: text,
+          icon: icon,//"success、error、warning、info、question"
+          confirmButtonText: confirmButtonText
+        })
+      }
+      //模块简介
+      function Prompt() {
+        let toast = function (c){
+          const {
+            msg = "",
+            icon = "success",
+            position = "top-end",
+          } = c;
+          const Toast = Swal.mixin({
+            toast: true,
+            title: msg,
+            position: position,
+            icon:icon,
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener('mouseenter', Swal.stopTimer)
+              toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+          })
+
+          Toast.fire({
+            icon: 'success',
+            title: 'Signed in successfully'
+          })
+        }
+        let success = function (c){
+          const{
+            msg ="",
+            title = "",
+            footer = "",
+          }=c;
+          Swal.fire({
+            icon: 'success',
+            title: title,
+            text: msg,
+            footer: footer
+          })
+        }
+
+        let error = function (c){
+          const{
+            msg ="",
+            title = "",
+            footer = "",
+          }=c;
+          Swal.fire({
+            icon: 'error',
+            title: title,
+            text: msg,
+            footer: footer
+          })
+        }
+
+        async function custom(c) {
+          const {
+            msg = "",
+            title = "",
+          } = c;//参数列表
+          const { value: formValues } = await Swal.fire({
+            title: title,
+            html:msg,
+            backdrop: false,
+            showCancelButton:true,
+            focusConfirm: false,
+            //重新开启一个日历
+            willOpen: () => {
+              const elem = document.getElementById('reservation-dates-modal');
+              const rp = new DateRangePicker(elem, {
+                format: 'yyyy-mm-dd',
+                showOnFocus: true,
+              })
+            },
+            //获取选择的入住和离开时间
+            preConfirm: () => {
+              return [
+                document.getElementById('start').value,
+                document.getElementById('end').value
+              ]
+            },
+            //在点击click后不第一时间启动按键,不在第一时间打开日历，而是等一下可以点按键再选择日历
+            didOpen: ()=> {
+              document.getElementById('start').removeAttribute('disabled')
+              document.getElementById('end').removeAttribute('disabled')
+            }
+
+          })
+
+          if (formValues) {
+            Swal.fire(JSON.stringify(formValues))
+          }
+        }
+
+
+        return {
+          toast : toast,
+          success : success,
+          error : error,
+          custom :custom,
+        }
+      }
+
+
+
+
+
+
+
+    </script>
+
   </body>
 </html>
