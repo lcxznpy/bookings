@@ -27,6 +27,7 @@ func NewHandles(r *Repository) {
 	Repo = r
 }
 
+// Home render the room page
 func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
 	//获取访问home的电脑的ip地址,将其传进map中
 	remoteIP := r.RemoteAddr
@@ -35,6 +36,7 @@ func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
 	render.RenderTemplate(w, "home.page.tmpl", &models.TemplateData{})
 }
 
+// About render the room page
 func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 	stringMap := make(map[string]string)
 	stringMap["test"] = "hello,again."
@@ -46,4 +48,29 @@ func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 	render.RenderTemplate(w, "about.page.tmpl", &models.TemplateData{
 		StringMap: stringMap,
 	})
+}
+
+// Reservation render the room page
+func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, "make-reservation.page.tmpl", &models.TemplateData{})
+}
+
+// One render the room page
+func (m *Repository) One(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, "one.page.tmpl", &models.TemplateData{})
+}
+
+// Two render the room page
+func (m *Repository) Two(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, "two.page.tmpl", &models.TemplateData{})
+}
+
+// Availability render the room page
+func (m *Repository) Availability(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, "search-availability.page.tmpl", &models.TemplateData{})
+}
+
+// Contact render the room page
+func (m *Repository) Contact(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, "contact.page.tmpl", &models.TemplateData{})
 }
